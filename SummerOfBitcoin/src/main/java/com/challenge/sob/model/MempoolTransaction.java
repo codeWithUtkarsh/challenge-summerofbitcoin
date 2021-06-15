@@ -2,13 +2,13 @@ package com.challenge.sob.model;
 
 import java.util.List;
 
-public class TransactionDetails {
+public class MempoolTransaction {
 
 	private String txId;
 	private Integer fee;
 	private Integer weight;
 	private List<String> parentTxId;
-	public TransactionDetails() {
+	public MempoolTransaction() {
 		super();
 	}
 	public String getTxId() {

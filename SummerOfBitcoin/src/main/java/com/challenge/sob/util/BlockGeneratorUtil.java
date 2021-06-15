@@ -9,15 +9,15 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.challenge.sob.exception.SobException;
-import com.challenge.sob.model.TransactionDetails;
+import com.challenge.sob.model.MempoolTransaction;
 import com.opencsv.CSVReader;
 
 @Component
 public class BlockGeneratorUtil {	
 
-	public List<TransactionDetails> csvReader(File csvFile) throws SobException
+	public List<MempoolTransaction> csvReader(File csvFile) throws SobException
 	{
-		List<TransactionDetails> transactions = new ArrayList<>();
+		List<MempoolTransaction> transactions = new ArrayList<>();
 		try
 		{
 			CSVReader csvReader = new CSVReader(new FileReader(csvFile));
@@ -32,7 +32,7 @@ public class BlockGeneratorUtil {
 
 			while((csvData = csvReader.readNext()) != null)
 			{
-				TransactionDetails tx = new TransactionDetails();
+				MempoolTransaction tx = new MempoolTransaction();
 				tx.setTxId(csvData[0]);
 
 				String feeStr = csvData[1];

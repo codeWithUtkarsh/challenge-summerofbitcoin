@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.challenge.sob.exception.SobException;
-import com.challenge.sob.model.TransactionDetails;
+import com.challenge.sob.model.MempoolTransaction;
 import com.challenge.sob.service.BlockGeneratorService;
 import com.challenge.sob.util.BlockGeneratorUtil;
 
@@ -32,10 +32,10 @@ public class BlockGeneratorServiceImpl implements BlockGeneratorService
 		File blockFile = null;
 		try
 		{
-			List<TransactionDetails> transactionDetails = blockGeneratorUtil.csvReader(csvFile);
+			List<MempoolTransaction> transactionDetails = blockGeneratorUtil.csvReader(csvFile);
 
-			Collections.sort(transactionDetails, new Comparator<TransactionDetails>() {
-				public int compare(TransactionDetails t1, TransactionDetails t2)
+			Collections.sort(transactionDetails, new Comparator<MempoolTransaction>() {
+				public int compare(MempoolTransaction t1, MempoolTransaction t2)
 				{
 					return t2.getFee()-t1.getFee();
 				}
@@ -43,7 +43,7 @@ public class BlockGeneratorServiceImpl implements BlockGeneratorService
 
 			List<String> blockData = new ArrayList<>();
 			BigInteger weight = BigInteger.ZERO;
-			for(TransactionDetails details :transactionDetails)
+			for(MempoolTransaction details :transactionDetails)
 			{
 				createBlockData(details, weight, blockData, transactionDetails);
 			}
@@ -62,8 +62,8 @@ public class BlockGeneratorServiceImpl implements BlockGeneratorService
 		return blockFile;
 	}
 
-	private List<String> createBlockData(TransactionDetails details, BigInteger weight, 
-			List<String> blockData, List<TransactionDetails> masterData)
+	private List<String> createBlockData(MempoolTransaction details, BigInteger weight, 
+			List<String> blockData, List<MempoolTransaction> masterData)
 	{
 		if(details.getParentTxId() == null || details.getParentTxId().isEmpty())
 		{
@@ -82,7 +82,7 @@ public class BlockGeneratorServiceImpl implements BlockGeneratorService
 				//Only if that is not already present
 				if(!blockData.contains(parentTxId))
 				{
-					Optional<TransactionDetails> parentTransaction = masterData.stream()
+					Optional<MempoolTransaction> parentTransaction = masterData.stream()
 							.filter(p -> p.getTxId().equals(parentTxId))
 							.findAny();
 					if(parentTransaction.isPresent())
